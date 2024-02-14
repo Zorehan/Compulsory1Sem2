@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class AppModel {
+    private static AppModel instance;
 
     LogicManager logic = new LogicManager();
     // Models of the data in the view
@@ -18,6 +19,20 @@ public class AppModel {
     private final ObservableList<TopMovie> obsTopMoviesSimilarUsers = FXCollections.observableArrayList();
 
     private final SimpleObjectProperty<User> obsLoggedInUser = new SimpleObjectProperty<>();
+
+    public AppModel()
+    {
+
+    }
+
+    public static AppModel getInstance()
+    {
+        if(instance == null)
+        {
+            instance = new AppModel();
+        }
+        return instance;
+    }
 
     public void loadUsers(){
         obsUsers.clear();

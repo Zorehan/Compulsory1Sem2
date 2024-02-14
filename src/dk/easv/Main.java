@@ -14,9 +14,9 @@ public class Main extends Application {
         primaryStage.setTitle("Movie Recommendation System 0.01 Beta");
         // primaryStage.setFullScreen(true);
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("/login.css").toExternalForm());
+        /*scene.getStylesheets().add(getClass().getResource("/login.css").toExternalForm());
         scene.getStylesheets().add("https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@300;400;500;600;700;800;900&display=swap");
-        System.out.println(getClass().getResource("presentation/css/login.css"));
+        System.out.println(getClass().getResource("presentation/css/login.css"));*/
         primaryStage.setScene(scene);
         primaryStage.show();
     }

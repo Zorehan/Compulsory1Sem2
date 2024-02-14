@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="579.0" prefWidth="847.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.presentation.controller.MainWindowController">
+
+    <!-- VBox with whitespace around -->
+    <VBox fx:id="vBox" layoutX="50" layoutY="50" prefHeight="485.0" prefWidth="747.0" spacing="10" AnchorPane.bottomAnchor="44.0" AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50" AnchorPane.topAnchor="50">
+
+        <!-- ScrollPanes -->
+        <ScrollPane fx:id="scrollPane1" prefHeight="200" prefWidth="300">
+            <!-- Content for scroll pane 1 -->
+        </ScrollPane>
+
+        <ScrollPane fx:id="scrollPane2" prefHeight="200" prefWidth="300">
+            <!-- Content for scroll pane 2 -->
+        </ScrollPane>
+
+        <ScrollPane fx:id="scrollPane3" prefHeight="200" prefWidth="300">
+            <!-- Content for scroll pane 3 -->
+        </ScrollPane>
+
+        <ScrollPane fx:id="scrollPane4" prefHeight="200" prefWidth="300">
+            <!-- Content for scroll pane 4 -->
+        </ScrollPane>
+
+    </VBox>
+
+    <!-- Other elements can be added here -->
+    <!-- For example: -->
+    <!-- <Button text="Click me" layoutX="10" layoutY="10"/> -->
+
+</AnchorPane>

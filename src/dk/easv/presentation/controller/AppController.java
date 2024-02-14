@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.*;
 
 public class AppController implements Initializable {
+
     @FXML
     private ListView<User> lvUsers;
     @FXML
