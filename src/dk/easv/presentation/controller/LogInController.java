@@ -1,6 +1,5 @@
 package dk.easv.presentation.controller;
 
-import dk.easv.entities.User;
 import dk.easv.presentation.model.AppModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,44 +19,34 @@ import java.util.ResourceBundle;
 public class LogInController implements Initializable {
     @FXML private PasswordField passwordField;
     @FXML private TextField userId;
-    private AppModel model;
+
+    private AppModel appModel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        model = new AppModel();
+        appModel = AppModel.getInstance();
     }
 
-    public void logIn(ActionEvent actionEvent) {
-        model.loadUsers();
-        model.loginUserFromUsername(userId.getText());
-        if(model.getObsLoggedInUser()!=null){
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/dk/easv/presentation/view/MainWindow.fxml"));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Movie Recommendation System 0.01 Beta");
-            stage.show();
-            AppController controller = loader.getController();
-
-            controller.setModel(model);
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Could not load App.fxml");
-            alert.showAndWait();
-        }
-
-        }
-        else{
+    public void pressLoginButton(ActionEvent actionEvent) {
+        appModel.loadUsers();
+        if(appModel.loginUserFromUsername(userId.getText())) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/dk/easv/presentation/view/MainWindow.fxml"));
+                Parent root = loader.load();
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.setTitle("Movie Recommendation System 0.01 Beta");
+                stage.show();
+                MainWindowController controller = loader.getController();
+                controller.setModel(appModel);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Could not load App.fxml");
+                alert.showAndWait();
+            }
+        } else {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Wrong username or password");
             alert.showAndWait();
         }
     }
-
-    public void signUp(ActionEvent actionEvent) {
-        System.out.println("Sign-Up");
-    }
-
 }

@@ -30,31 +30,22 @@ public class MainWindowController {
     @FXML
     private ScrollPane scrollPane4;
 
-    private User userTest;
-
     @FXML
     public void initialize() {
         appModel = AppModel.getInstance();
-        System.out.println(appModel.getObsTopMovieSeen().toString());
-        initializeScrollPane(scrollPane1, appModel.getObsTopMovieNotSeen());
-        initializeScrollPane(scrollPane2, appModel.getObsTopMovieSeen());
-        initializeScrollPane(scrollPane3, appModel.getObsTopMovieNotSeen());
-        initializeScrollPane(scrollPane4, appModel.getObsTopMovieNotSeen());
-        appModel.loadUsers();
+        User loggedInUser = appModel.getObsLoggedInUser();
 
-        if(!appModel.getObsUsers().isEmpty())
-        {
-            Random random = new Random();
-            int randomIndex = random.nextInt(appModel.getObsUsers().size());
-            userTest = appModel.getObsUsers().get(randomIndex);
-            System.out.println("randomly select user " + userTest.getName());
+        if (loggedInUser != null) {
+            appModel.loadData(loggedInUser);
+            System.out.println(loggedInUser);
+            System.out.println(appModel.getObsTopMovieSeen().toString());
+            initializeScrollPane(scrollPane1, appModel.getObsTopMovieNotSeen());
+            initializeScrollPane(scrollPane2, appModel.getObsTopMovieSeen());
+            initializeScrollPane(scrollPane3, appModel.getObsTopMovieNotSeen());
+            initializeScrollPane(scrollPane4, appModel.getObsTopMovieNotSeen());
+            appModel.loadUsers();
         }
-        else
-        {
-            System.out.println("no users");
-        }
-        appModel.loadData(userTest);
-        }
+    }
 
 
 
@@ -119,5 +110,9 @@ public class MainWindowController {
 
         thumbnail.getChildren().add(rectangle);
         return thumbnail;
+    }
+
+    public void setModel(AppModel model) {
+        this.appModel = model;
     }
 }
