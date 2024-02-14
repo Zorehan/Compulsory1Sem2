@@ -9,6 +9,9 @@
 }
 
 .compulsory-flix-label {
+    -fx-position: absolute;
+    -fx-top: 50%;
+    -fx-left: 50%;
     -fx-font-family: 'Inknut Antiqua';
     -fx-font-size: 15px;
     -fx-text-fill: #e50914;

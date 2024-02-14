@@ -1,0 +1,15 @@
+.scrollPaneLabels{
+    -fx-font-family: 'Inknut Antiqua';
+    -fx-font-size: 10px;
+    -fx-text-fill: #FFFFFF
+}
+
+.scroll-pane > .viewport{
+    -fx-background-color: #221f1f;
+}
+
+.compulsoryflix-label{
+        -fx-font-family: 'Inknut Antiqua';
+        -fx-font-size: 15px;
+        -fx-text-fill: #e50914;
+}

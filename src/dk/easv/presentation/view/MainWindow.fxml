@@ -1,32 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="579.0" prefWidth="847.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.presentation.controller.MainWindowController">
+<AnchorPane prefHeight="677.0" prefWidth="901.0" style="-fx-background-color: #221f1f" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.presentation.controller.MainWindowController">
 
     <!-- VBox with whitespace around -->
-    <VBox fx:id="vBox" layoutX="50" layoutY="50" prefHeight="485.0" prefWidth="747.0" spacing="10" AnchorPane.bottomAnchor="44.0" AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50" AnchorPane.topAnchor="50">
+    <VBox fx:id="vBox" layoutX="49.0" layoutY="68.0" prefHeight="542.0" prefWidth="766.0" spacing="20" style="-fx-background-color: #221f1f" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="49.0" AnchorPane.rightAnchor="86.0" AnchorPane.topAnchor="68.0">
+      <Label styleClass="scrollPaneLabels" text="Top Movies For You" />
 
         <!-- ScrollPanes -->
-        <ScrollPane fx:id="scrollPane1" prefHeight="200" prefWidth="300">
+        <ScrollPane fx:id="scrollPane1" prefHeight="200.0" prefWidth="786.0" style="-fx-background-color: #221f1f">
             <!-- Content for scroll pane 1 -->
         </ScrollPane>
+      <Label styleClass="scrollPaneLabels" text="Top Movies You Have Not Seen" />
 
-        <ScrollPane fx:id="scrollPane2" prefHeight="200" prefWidth="300">
+        <ScrollPane fx:id="scrollPane2" prefHeight="200" prefWidth="300" style="-fx-background-color: #221f1f">
             <!-- Content for scroll pane 2 -->
         </ScrollPane>
+      <Label styleClass="scrollPaneLabels" text="Top Users Similar To You" />
 
-        <ScrollPane fx:id="scrollPane3" prefHeight="200" prefWidth="300">
+        <ScrollPane fx:id="scrollPane3" prefHeight="200" prefWidth="300" style="-fx-background-color: #221f1f">
             <!-- Content for scroll pane 3 -->
         </ScrollPane>
+      <Label styleClass="scrollPaneLabels" text="Top Movies From Similar Users" />
 
-        <ScrollPane fx:id="scrollPane4" prefHeight="200" prefWidth="300">
+        <ScrollPane fx:id="scrollPane4" prefHeight="200" prefWidth="300" style="-fx-background-color: #221f1f">
             <!-- Content for scroll pane 4 -->
         </ScrollPane>
 
     </VBox>
+   <Label layoutX="21.0" layoutY="25.0" text="COMPULSORYFLIX" styleClass="compulsoryflix-label"/>
 
     <!-- Other elements can be added here -->
     <!-- For example: -->

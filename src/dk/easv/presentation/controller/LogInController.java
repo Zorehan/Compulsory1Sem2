@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -34,9 +35,15 @@ public class LogInController implements Initializable {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/dk/easv/presentation/view/MainWindow.fxml"));
                 Parent root = loader.load();
                 Stage stage = new Stage();
-                stage.setScene(new Scene(root));
+                Scene sceneMainWindow = new Scene(root);
+                sceneMainWindow.getStylesheets().add(getClass().getResource("/mainWindow.css").toExternalForm());
+                sceneMainWindow.getStylesheets().add("https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@300;400;500;600;700;800;900&display=swap");
+                stage.setScene(sceneMainWindow);
                 stage.setTitle("Movie Recommendation System 0.01 Beta");
                 stage.show();
+                stage.setMaximized(true);
+                Stage loginStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                loginStage.close();
                 MainWindowController controller = loader.getController();
                 controller.setModel(appModel);
             } catch (IOException e) {

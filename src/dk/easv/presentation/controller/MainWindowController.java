@@ -59,7 +59,8 @@ public class MainWindowController {
         for (Movie movie : movies) {
             addButton(contentBox, movie);
         }
-
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         // Listen for changes in the list of movies
         movies.addListener((ListChangeListener.Change<? extends Movie> change) -> {
             while (change.next()) {
@@ -78,6 +79,7 @@ public class MainWindowController {
                     });
                 }
             }
+
         });
 
         // Set the content of the scroll pane to the HBox
@@ -89,7 +91,9 @@ public class MainWindowController {
 
     private void addButton(HBox contentBox, Movie movie) {
         Button button = new Button(movie.getTitle() + " (" + movie.getYear() + ")");
-        button.setPrefSize(150, 200); // Set fixed size for the button
+        double buttonWidth = 120;
+        double buttonHeight = 120;
+        button.setPrefSize(buttonWidth, buttonHeight); // Set fixed size for the button
         button.setOnAction(event -> {
             // Action to perform when the button is clicked
             System.out.println("Button clicked for movie: " + movie.getTitle());
