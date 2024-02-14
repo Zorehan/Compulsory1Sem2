@@ -1,21 +1,23 @@
 package dk.easv.presentation.controller;
 
+import dk.easv.entities.User;
 import dk.easv.presentation.model.AppModel;
+import dk.easv.presentation.util.HttpService;
+import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import dk.easv.entities.*;
-import java.util.Random;
-public class MainWindowController {
+import dk.easv.entities.Movie;
 
+import java.io.IOException;
+
+public class MainWindowController {
+    private final HttpService httpService = new HttpService();
+    private final String mainApiLink = "https://image.tmdb.org/t/p/original";
     private AppModel appModel;
 
     @FXML
@@ -45,47 +47,25 @@ public class MainWindowController {
             initializeScrollPane(scrollPane4, appModel.getObsTopMovieNotSeen());
             appModel.loadUsers();
         }
+
+        // Asynchronously load actual images
+        new Thread(() -> {
+            loadImages(scrollPane1);
+            loadImages(scrollPane2);
+            loadImages(scrollPane3);
+            loadImages(scrollPane4);
+        }).start();
     }
 
-
-
-
     private void initializeScrollPane(ScrollPane scrollPane, ObservableList<Movie> movies) {
-        // Create an HBox to hold the content
         HBox contentBox = new HBox();
-        contentBox.setSpacing(10); // Adjust spacing between buttons
+        contentBox.setSpacing(10);
 
-        // Add initial movies to the contentBox
         for (Movie movie : movies) {
             addButton(contentBox, movie);
         }
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        // Listen for changes in the list of movies
-        movies.addListener((ListChangeListener.Change<? extends Movie> change) -> {
-            while (change.next()) {
-                if (change.wasAdded()) {
-                    for (Movie movie : change.getAddedSubList()) {
-                        addButton(contentBox, movie);
-                    }
-                } else if (change.wasRemoved()) {
-                    // Remove corresponding buttons for removed movies
-                    contentBox.getChildren().removeIf(node -> {
-                        if (node instanceof Button) {
-                            Movie movie = (Movie) node.getUserData();
-                            return change.getRemoved().contains(movie);
-                        }
-                        return false;
-                    });
-                }
-            }
 
-        });
-
-        // Set the content of the scroll pane to the HBox
         scrollPane.setContent(contentBox);
-
-        // Enable horizontal scrolling
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
     }
 
@@ -93,27 +73,42 @@ public class MainWindowController {
         Button button = new Button(movie.getTitle() + " (" + movie.getYear() + ")");
         double buttonWidth = 120;
         double buttonHeight = 120;
-        button.setPrefSize(buttonWidth, buttonHeight); // Set fixed size for the button
-        button.setOnAction(event -> {
-            // Action to perform when the button is clicked
-            System.out.println("Button clicked for movie: " + movie.getTitle());
-        });
-        button.setUserData(movie); // Store movie data in the button
+        button.setPrefSize(buttonWidth, buttonHeight);
+        button.setOnAction(event -> System.out.println("Button clicked for movie: " + movie.getTitle()));
+        button.setUserData(movie);
+        button.getStyleClass().add("button"); // Add a CSS class to identify buttons later
+
+        // Set a placeholder image
+        button.setStyle("-fx-background-image: url('/placeholder.png'); " +
+                "-fx-background-size: stretch;");
+
         contentBox.getChildren().add(button);
     }
 
-    // Method to create a placeholder thumbnail
-    private Pane createThumbnail() {
-        Pane thumbnail = new Pane();
-        thumbnail.setPrefSize(150, 150); // Set thumbnail size
+    private void loadImages(ScrollPane scrollPane) {
+        for (Node node : scrollPane.getContent().lookupAll(".button")) {
+            Button button = (Button) node;
+            Movie movie = (Movie) button.getUserData();
+            loadPosterImage(button, movie);
+        }
+    }
 
-        // Placeholder rectangle (you would replace this with an actual image)
-        Rectangle rectangle = new Rectangle(140, 140, Color.LIGHTGRAY);
-        rectangle.setStroke(Color.BLACK);
-        rectangle.setStrokeWidth(1);
-
-        thumbnail.getChildren().add(rectangle);
-        return thumbnail;
+    private void loadPosterImage(Button button, Movie movie) {
+        try {
+            String jsonResponse = httpService.searchMovie(movie.getTitle());
+            if (jsonResponse != null) {
+                String posterPath = httpService.getPosterPath(jsonResponse);
+                if (posterPath != null) {
+                    String imageUrl = mainApiLink + posterPath;
+                    Platform.runLater(() -> {
+                        button.setStyle("-fx-background-image: url('" + imageUrl + "');" +
+                                "-fx-background-size: stretch;");
+                    });
+                }
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setModel(AppModel model) {
