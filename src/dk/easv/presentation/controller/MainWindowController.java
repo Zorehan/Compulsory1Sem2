@@ -136,7 +136,7 @@ denne metode sætter en ScrollPane op baseret fra information fra Observablelist
         button.getStyleClass().add("button"); // Add a CSS class to identify buttons later
 
         // Set a placeholder image
-        button.setStyle("-fx-background-image: url('/placeholder.png'); " +
+        button.setStyle("-fx-background-image: url('/placeholderprofilepicture.jpg'); " +
                 "-fx-background-size: stretch;");
 
         Label titleLabel = new Label(userSimilarity.getName());

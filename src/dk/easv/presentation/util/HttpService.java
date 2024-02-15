@@ -16,8 +16,15 @@ public class HttpService {
     {}
 
     public String searchMovie(String query) throws IOException, InterruptedException {
+        String searchQuery = query;
+
+        int colonIndex = query.indexOf(":");
+        if (colonIndex != -1) {
+            searchQuery = query.substring(0, colonIndex);
+        }
+
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.themoviedb.org/3/search/movie?query=" + query.replace(" ", "%20") + "&include_adult=false&language=en-US&page=1"))
+                .uri(URI.create("https://api.themoviedb.org/3/search/movie?query=" + searchQuery.replace(" ", "%20") + "&include_adult=false&language=en-US&page=1"))
                 .header("accept", "application/json")
                 .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiYTgwZjA2MmFhNzViNWUzOGU4M2U2M2QwMDBkOGZkZSIsInN1YiI6IjY1YTUxMjQ2MWEzMjQ4MDEyZjA0ODUxYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.vt7OhyBXRi7txZOUqnh8d7sBurgQsoa9HN69goTkfG0")
                 .method("GET", HttpRequest.BodyPublishers.noBody())
@@ -55,8 +62,14 @@ public class HttpService {
     }
 
     public String searchSeries(String query) throws IOException, InterruptedException {
+        String searchQuery = query;
+
+        int colonIndex = query.indexOf(":");
+        if (colonIndex != -1) {
+            searchQuery = query.substring(0, colonIndex);
+        }
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.themoviedb.org/3/search/tv?query=" + query.replace(" ", "%20") + "&include_adult=false&language=en-US&page=1"))
+                .uri(URI.create("https://api.themoviedb.org/3/search/tv?query=" + searchQuery.replace(" ", "%20") + "&include_adult=false&language=en-US&page=1"))
                 .header("accept", "application/json")
                 .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiYTgwZjA2MmFhNzViNWUzOGU4M2U2M2QwMDBkOGZkZSIsInN1YiI6IjY1YTUxMjQ2MWEzMjQ4MDEyZjA0ODUxYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.vt7OhyBXRi7txZOUqnh8d7sBurgQsoa9HN69goTkfG0")
                 .method("GET", HttpRequest.BodyPublishers.noBody())
