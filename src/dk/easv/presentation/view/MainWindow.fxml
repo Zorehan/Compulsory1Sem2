@@ -32,7 +32,7 @@
         </ScrollPane>
 
     </VBox>
-   <Label layoutX="21.0" layoutY="25.0" text="COMPULSORYFLIX" styleClass="compulsoryflix-label"/>
+   <Label layoutX="21.0" layoutY="25.0" text="COMPULSORYFLIX" styleClass="compulsoryflix"/>
 
     <!-- Other elements can be added here -->
     <!-- For example: -->

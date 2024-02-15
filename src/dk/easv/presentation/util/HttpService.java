@@ -16,7 +16,6 @@ public class HttpService {
     {}
 
     public String searchMovie(String query) throws IOException, InterruptedException {
-        System.out.println(query);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.themoviedb.org/3/search/movie?query=" + query.replace(" ", "%20") + "&include_adult=false&language=en-US&page=1"))
                 .header("accept", "application/json")
@@ -24,7 +23,14 @@ public class HttpService {
                 .method("GET", HttpRequest.BodyPublishers.noBody())
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.body());
+
+        // Check if the response contains results
+        JSONObject jsonObject = new JSONObject(response.body());
+        JSONArray resultsArray = jsonObject.getJSONArray("results");
+        if (resultsArray.isEmpty()) {
+            return null;
+        }
+
         return response.body();
     }
 
@@ -48,5 +54,16 @@ public class HttpService {
         return null;
     }
 
+    public String searchSeries(String query) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://api.themoviedb.org/3/search/tv?query=" + query.replace(" ", "%20") + "&include_adult=false&language=en-US&page=1"))
+                .header("accept", "application/json")
+                .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiYTgwZjA2MmFhNzViNWUzOGU4M2U2M2QwMDBkOGZkZSIsInN1YiI6IjY1YTUxMjQ2MWEzMjQ4MDEyZjA0ODUxYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.vt7OhyBXRi7txZOUqnh8d7sBurgQsoa9HN69goTkfG0")
+                .method("GET", HttpRequest.BodyPublishers.noBody())
+                .build();
+        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
+        return response.body();
+    }
 
 }
