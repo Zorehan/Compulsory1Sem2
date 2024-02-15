@@ -9,12 +9,19 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-
+/*
+HTTPService klassens formål er at organisere API-relateret kode det samme sted, vi behandler api-responserne med "org.json"
+librarien, og bruger TMDB's free to use api.
+ */
 public class HttpService {
 
     public HttpService()
     {}
-
+/*
+searchMovie tager en query som parameter og sender en GET request afsted til et endpoint der søger databasen for film.
+I starten er der lige en lille stringmanipulation da i mange tilfæller er titlerne fra vores datasæt så specifikke at api-en ikke kan
+finde nogen resultater. efter requesten returnerer metoden jsonresponsen som et string.
+ */
     public String searchMovie(String query) throws IOException, InterruptedException {
         String searchQuery = query;
 
@@ -31,7 +38,6 @@ public class HttpService {
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
 
-        // Check if the response contains results
         JSONObject jsonObject = new JSONObject(response.body());
         JSONArray resultsArray = jsonObject.getJSONArray("results");
         if (resultsArray.isEmpty()) {
@@ -40,7 +46,11 @@ public class HttpService {
 
         return response.body();
     }
-
+/*
+getPosterPath tager en String som parameter og laver med det samme dette string om til et JSONObject
+herefter bruger vi nogen af de indbygget JSONArray metoder til at få fat i information fra resultatsættet som vi har brug for.
+I vores tilfælle er det slutningen på et url hvor det fulde url er linket til et boxcover billede.
+ */
     public String getPosterPath(String jsonResponse) {
         JSONObject jsonObject = new JSONObject(jsonResponse);
         JSONArray resultsArray = jsonObject.getJSONArray("results");
@@ -60,7 +70,9 @@ public class HttpService {
         }
         return null;
     }
-
+/*
+Det samme som searchMovies men bare for serier, da api'en ikke tillader at søge begge dele med et endpoint.
+ */
     public String searchSeries(String query) throws IOException, InterruptedException {
         String searchQuery = query;
 

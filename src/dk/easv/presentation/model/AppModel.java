@@ -11,7 +11,6 @@ public class AppModel {
     private static AppModel instance;
 
     LogicManager logic = new LogicManager();
-    // Models of the data in the view
     private final ObservableList<User>  obsUsers = FXCollections.observableArrayList();
     private final ObservableList<Movie> obsTopMovieSeen = FXCollections.observableArrayList();
     private final ObservableList<Movie> obsTopMovieNotSeen = FXCollections.observableArrayList();

@@ -59,7 +59,6 @@ fra API-en (dette er så programmet kan starte efter nødvendig data er hentet)
             appModel.loadUsers();
         }
 
-        // Asynchronously load actual images
         new Thread(() -> {
             loadImages(scrollPane1);
             loadImages(scrollPane2);
@@ -96,7 +95,11 @@ denne metode sætter en ScrollPane op baseret fra information fra Observablelist
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
     }
-
+/*
+Der er 3 addButton metoder da de tager allesammen en anden klasse som parameter,
+Metoden I sig selv opretter en knap med alt dataen fra klassen knyttet til det, tilføjer et placeholder billede
+og laver en Label  ien seperat VBox som er knyttet til Knappens eksisterende HBox
+ */
     private void addButton(HBox contentBox, Movie movie) {
         Button button = new Button();
         double buttonWidth = 120;
@@ -104,23 +107,22 @@ denne metode sætter en ScrollPane op baseret fra information fra Observablelist
         button.setPrefSize(buttonWidth, buttonHeight);
         button.setOnAction(event -> System.out.println("Button clicked for movie: " + movie.getTitle()));
         button.setUserData(movie);
-        button.getStyleClass().add("button"); // Add a CSS class to identify buttons later
+        button.getStyleClass().add("button");
 
-        // Set a placeholder image
+
         button.setStyle("-fx-background-image: url('/placeholder.png'); " +
                 "-fx-background-size: stretch;");
 
         Label titleLabel = new Label(movie.getTitle() + " (" + movie.getYear() + ")");
-        titleLabel.setWrapText(false); // Do not allow text to wrap
-        titleLabel.setMaxWidth(buttonWidth); // Limit the width to fit the button size
-        titleLabel.setMaxHeight(buttonHeight); // Limit the height to fit one line
-        titleLabel.getStyleClass().add("movieLabels"); // Add a CSS class to identify labels later
-        titleLabel.setEllipsisString("..."); // Set ellipsis for truncated text
+        titleLabel.setWrapText(false);
+        titleLabel.setMaxWidth(buttonWidth);
+        titleLabel.setMaxHeight(buttonHeight);
+        titleLabel.getStyleClass().add("movieLabels");
+        titleLabel.setEllipsisString("...");
 
-        // Create a VBox to hold the button and label
         VBox container = new VBox();
         container.getChildren().addAll(button, titleLabel);
-        container.setSpacing(5); // Set spacing between button and label
+        container.setSpacing(5);
 
         contentBox.getChildren().add(container);
     }
@@ -133,23 +135,23 @@ denne metode sætter en ScrollPane op baseret fra information fra Observablelist
         button.setPrefSize(buttonWidth,buttonHeight);
         button.setOnAction(event -> System.out.println("Button clicked for movie: " + userSimilarity.getName()));
         button.setUserData(userSimilarity);
-        button.getStyleClass().add("button"); // Add a CSS class to identify buttons later
+        button.getStyleClass().add("button");
 
-        // Set a placeholder image
+
         button.setStyle("-fx-background-image: url('/placeholderprofilepicture.jpg'); " +
                 "-fx-background-size: stretch;");
 
         Label titleLabel = new Label(userSimilarity.getName());
-        titleLabel.setWrapText(false); // Do not allow text to wrap
-        titleLabel.setMaxWidth(buttonWidth); // Limit the width to fit the button size
-        titleLabel.setMaxHeight(buttonHeight); // Limit the height to fit one line
-        titleLabel.getStyleClass().add("movieLabels"); // Add a CSS class to identify labels later
-        titleLabel.setEllipsisString("..."); // Set ellipsis for truncated text
+        titleLabel.setWrapText(false);
+        titleLabel.setMaxWidth(buttonWidth);
+        titleLabel.setMaxHeight(buttonHeight);
+        titleLabel.getStyleClass().add("movieLabels");
+        titleLabel.setEllipsisString("...");
 
-        // Create a VBox to hold the button and label
+
         VBox container = new VBox();
         container.getChildren().addAll(button, titleLabel);
-        container.setSpacing(5); // Set spacing between button and label
+        container.setSpacing(5);
 
         contentBox.getChildren().add(container);
     }
@@ -162,23 +164,22 @@ denne metode sætter en ScrollPane op baseret fra information fra Observablelist
         button.setPrefSize(buttonWidth,buttonHeight);
         button.setOnAction(event -> System.out.println("Button clicked for movie: " + topMovie.getTitle()));
         button.setUserData(topMovie);
-        button.getStyleClass().add("button"); // Add a CSS class to identify buttons later
+        button.getStyleClass().add("button");
 
-        // Set a placeholder image
         button.setStyle("-fx-background-image: url('/placeholder.png'); " +
                 "-fx-background-size: stretch;");
 
         Label titleLabel = new Label(topMovie.getTitle());
-        titleLabel.setWrapText(false); // Do not allow text to wrap
-        titleLabel.setMaxWidth(buttonWidth); // Limit the width to fit the button size
-        titleLabel.setMaxHeight(buttonHeight); // Limit the height to fit one line
-        titleLabel.getStyleClass().add("movieLabels"); // Add a CSS class to identify labels later
-        titleLabel.setEllipsisString("..."); // Set ellipsis for truncated text
+        titleLabel.setWrapText(false);
+        titleLabel.setMaxWidth(buttonWidth);
+        titleLabel.setMaxHeight(buttonHeight);
+        titleLabel.getStyleClass().add("movieLabels");
+        titleLabel.setEllipsisString("...");
 
-        // Create a VBox to hold the button and label
+
         VBox container = new VBox();
         container.getChildren().addAll(button, titleLabel);
-        container.setSpacing(5); // Set spacing between button and label
+        container.setSpacing(5);
 
         contentBox.getChildren().add(container);
     }
@@ -197,7 +198,9 @@ denne metode sætter en ScrollPane op baseret fra information fra Observablelist
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
     }
-
+/*
+loadImages loader billederne ind i scrollpanesne ved at køre loadPosterImage metoden på knappen og filmen der er knyttet til den
+ */
     private void loadImages(ScrollPane scrollPane) {
         HBox contentBox = (HBox) scrollPane.getContent();
         int maxMovies = Math.min(contentBox.getChildren().size(), 20);
@@ -219,7 +222,12 @@ denne metode sætter en ScrollPane op baseret fra information fra Observablelist
             }
         }
     }
-
+/*
+loadPosterimage henter billeder til knapperne ved hjælp af TMDB API'en som man kan læse nærmere om i httpService klassen
+Den kigger efter om resultatet af api-requesten returner null, da det de fleste tilfæller betyder at det er en serie og ikke en film
+herefter kører den searchSeries metoden, og kører getPosterPath metoden fra HttpService med responsen fra serie-api-endpointet
+efter alt dette sætter den knappens billede til at være den hentet fra TMDB.
+ */
     private void loadPosterImage(Button button, Movie movie) {
         try {
             String jsonResponse = httpService.searchMovie(movie.getTitle());
