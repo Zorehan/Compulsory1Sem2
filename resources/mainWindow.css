@@ -23,3 +23,22 @@
     -fx-font-size: 9px;
     -fx-text-fill: #e50914;
 }
+
+.navigationButtons
+{
+    -fx-background-color: transparent;
+    -fx-font-family: 'Inknut Antiqua';
+    -fx-font-style: italic;
+    -fx-text-fill: #FFFFFF;
+}
+
+.navigationButtons:hover
+{
+    -fx-text-fill: rgb(128, 128, 128);
+}
+
+.button:hover
+{
+    -fx-opacity: 0.8; /* Reduce opacity on hover */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0.5, 0, 0); /* Add a drop shadow effect */
+}
