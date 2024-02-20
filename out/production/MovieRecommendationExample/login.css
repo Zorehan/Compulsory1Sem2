@@ -9,12 +9,13 @@
 }
 
 .compulsory-flix-label {
-    -fx-position: absolute;
-    -fx-top: 50%;
-    -fx-left: 50%;
-    -fx-font-family: 'Inknut Antiqua';
-    -fx-font-size: 15px;
+    -fx-font-family: 'Kanit', sans-serif;
+    -fx-font-weight: 600;
+    -fx-font-style: italic;
+    -fx-font-size: 30px;
     -fx-text-fill: #e50914;
+    -fx-alignment: center;
+    -fx-translate-y: -50%;
 }
 
 .background-colour {

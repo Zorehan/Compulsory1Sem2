@@ -1,6 +1,6 @@
 .scrollPaneLabels{
-    -fx-font-family: 'Inknut Antiqua';
-    -fx-font-size: 10px;
+    -fx-font-family: 'Inknut Antiqua', sans-serif;
+    -fx-font-size: 15px;
     -fx-text-fill: #FFFFFF
 }
 
@@ -9,14 +9,17 @@
 }
 
 .compulsoryflix{
-        -fx-font-family: 'Inknut Antiqua';
-        -fx-font-size: 15px;
-        -fx-text-fill: #e50914;
+    -fx-font-family: 'Kanit', sans-serif;
+    -fx-font-weight: 600;
+    -fx-font-style: italic;
+    -fx-font-size: 30px;
+    -fx-text-fill: #e50914;
+    -fx-translate-y: -50%;
 }
 
 .movieLabels
 {
     -fx-font-family: 'Inknut Antiqua';
-    -fx-font-size: 8px;
+    -fx-font-size: 9px;
     -fx-text-fill: #e50914;
 }
