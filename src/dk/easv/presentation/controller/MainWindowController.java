@@ -111,7 +111,8 @@ og laver en Label  ien seperat VBox som er knyttet til Knappens eksisterende HBo
 
 
         button.setStyle("-fx-background-image: url('/placeholder.png'); " +
-                "-fx-background-size: stretch;");
+                "-fx-background-size: stretch;" +
+                "-fx-background-radius: 10px;");
 
         Label titleLabel = new Label(movie.getTitle() + " (" + movie.getYear() + ")");
         titleLabel.setWrapText(false);
