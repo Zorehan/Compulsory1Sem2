@@ -9,13 +9,23 @@ import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.WritableImage;
+import javafx.scene.layout.*;
 import dk.easv.entities.Movie;
-import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -105,7 +115,7 @@ og laver en Label  ien seperat VBox som er knyttet til Knappens eksisterende HBo
         double buttonWidth = 120;
         double buttonHeight = 120;
         button.setPrefSize(buttonWidth, buttonHeight);
-        button.setOnAction(event -> System.out.println("Button clicked for movie: " + movie.getTitle()));
+        button.setOnAction(event -> showMovieDetails(movie, button));
         button.setUserData(movie);
         button.getStyleClass().add("button");
 
@@ -134,7 +144,7 @@ og laver en Label  ien seperat VBox som er knyttet til Knappens eksisterende HBo
         double buttonWidth = 120;
         double buttonHeight = 120;
         button.setPrefSize(buttonWidth,buttonHeight);
-        button.setOnAction(event -> System.out.println("Button clicked for movie: " + userSimilarity.getName()));
+        button.setOnAction(event -> System.out.println("Button clicked for user: " + userSimilarity.getName()));
         button.setUserData(userSimilarity);
         button.getStyleClass().add("button");
 
@@ -256,4 +266,111 @@ efter alt dette sætter den knappens billede til at være den hentet fra TMDB.
     public void setModel(AppModel model) {
         this.appModel = model;
     }
+
+  /*
+  showMovieDetails metoden sørger for at hvis man trykker på en knap, så kommer der et nyt vindue op der viser nærmere
+  information om filmen (her kunne man så hente mere information fra api'en, vi vælger dog bare at vise titlen, datoen
+  og noget falsk latin brødtekst for at fylde resten ud. Ved siden af dette opretten den alle elementerne som
+   */
+  private void showMovieDetails(Movie movie, Button button) {
+
+      Parent root = button.getScene().getRoot();
+
+
+      BoxBlur blurEffect = new BoxBlur(10, 10, 3);
+      root.setEffect(blurEffect);
+
+
+      Stage stage = new Stage();
+      stage.setTitle(movie.getTitle() + " Details");
+      stage.setOnHidden(event -> root.setEffect(null));
+
+      Image backgroundImage = button.getBackground().getImages().get(0).getImage();
+
+      ImageView imageView = new ImageView(backgroundImage);
+      imageView.setFitWidth(800);
+      imageView.setFitHeight(600);
+      imageView.setEffect(new BoxBlur(10, 10, 3));
+
+      Pane backgroundPane = new Pane();
+      backgroundPane.getChildren().add(imageView);
+
+
+      Color textColor = calculateTextColor(backgroundImage);
+
+
+      Label titleLabel = new Label("Title: " + movie.getTitle());
+      titleLabel.setTextFill(textColor);
+      titleLabel.setStyle("-fx-font-size: 24px; -fx-font-family: 'Inknut Antiqua'; -fx-font-weight: bold;");
+      titleLabel.setAlignment(Pos.TOP_LEFT);
+      titleLabel.setPadding(new Insets(20));
+
+      Label yearLabel = new Label("Year: " + movie.getYear());
+      yearLabel.setTextFill(textColor);
+      yearLabel.setStyle("-fx-font-size: 20px; -fx-font-family: 'Inknut Antiqua';");
+      yearLabel.setAlignment(Pos.TOP_LEFT);
+      yearLabel.setPadding(new Insets(0, 20, 20, 20));
+
+
+      Label descriptionLabel = new Label("Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
+      descriptionLabel.setWrapText(true);
+      descriptionLabel.setTextFill(textColor);
+      descriptionLabel.setStyle("-fx-font-size: 15px; -fx-font-family: 'Inknut Antiqua';");
+      descriptionLabel.setAlignment(Pos.BOTTOM_RIGHT);
+      descriptionLabel.setPadding(new Insets(20));
+
+
+      VBox layout = new VBox();
+      layout.getChildren().addAll(titleLabel, yearLabel, descriptionLabel);
+      layout.setAlignment(Pos.TOP_LEFT);
+
+      StackPane stackPane = new StackPane();
+      stackPane.getChildren().addAll(backgroundPane, layout);
+
+      Scene scene = new Scene(stackPane, 800, 600);
+      stage.setScene(scene);
+
+      Button playButton = new Button("PLAY");
+      playButton.setStyle("-fx-background-color: red; -fx-text-fill: black; -fx-font-size: 18px; -fx-pref-width: 100px; -fx-pref-height: 50px; -fx-background-radius: 10; -fx-font-family: 'Inknut Antiqua';");
+
+      playButton.setOnAction(event -> {
+          System.out.println("Playing movie: " + movie.getTitle());
+      });
+
+      StackPane.setAlignment(playButton, Pos.BOTTOM_RIGHT);
+      StackPane.setMargin(playButton, new Insets(0, 20, 20, 0));
+      stackPane.getChildren().add(playButton);
+
+      stage.show();
+  }
+
+  /*
+  Metoden her bruger PixelReader klassen til at få fat i farvekoderne til hver enkelt pixel på posterbillederne
+  efterfølgende bliver de kørt igennem et loop hvor ved hjælp af en formel(som vægter hvorvidt menneskeøjet opfanger forskellige farver)
+  bestemmer om den pixel er lys eller mørk, til sidst får den det gennemsnitlige lysstyrke på billedet ud, hvis den er lys returner metoden sort
+  og hvis den er mørk returner metoden hvid.
+   */
+    private Color calculateTextColor(Image image) {
+
+        PixelReader pixelReader = image.getPixelReader();
+
+        double totalBrightness = 0;
+        int pixelCount = 0;
+
+        for (int y = 0; y < image.getHeight(); y++) {
+            for (int x = 0; x < image.getWidth(); x++) {
+                Color color = pixelReader.getColor(x, y);
+
+                double brightness = (0.2126 * color.getRed()) + (0.7152 * color.getGreen()) + (0.0722 * color.getBlue());
+                totalBrightness += brightness;
+                pixelCount++;
+            }
+        }
+
+
+        double averageBrightness = totalBrightness / pixelCount;
+
+        return (averageBrightness < 0.5) ? Color.WHITE : Color.BLACK;
+    }
+
 }
